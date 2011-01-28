@@ -16,14 +16,14 @@ var tests = {
         v = store.find('k1');
         Assert.equal('v1', v);
         Assert.equal(1, store.size());
-        
+
         v = store.find('k0');
         Assert.equal(null, v);
         store.insert('k0', 'v0');
         v = store.find('k0');
         Assert.equal('v0', v);
         Assert.equal(2, store.size());
-        
+
         Assert.equal(0, store._index('k0'));
         Assert.equal(1, store._index('k1'));
     },
@@ -34,11 +34,11 @@ var tests = {
         Assert.equal('v1', store.find('k0'));
         Assert.equal(1, store.size());
     },
-    test_collation: function(store) {        
+    test_collation: function(store) {
         [ {}, [], 'string', 1.0, true, false, null, undefined ].forEach(function(k) {
             store.insert(k, 'v');
         });
-        
+
         Assert.equal(8, store.size());
         Assert.equal(0, store._index(undefined));
         Assert.equal(1, store._index(null));
@@ -53,16 +53,16 @@ var tests = {
         store.insert('k0', 'v0');
         store.insert('k1', 'v1');
         Assert.equal(2, store.size());
-        
+
         // Conditionally modify an existing [k, v]
         store.insert2('k0', function(v, cb) {
             Assert.equal('v0', v);
             cb('__v0__');
         });
-        
+
         Assert.equal(2, store.size());
         Assert.equal('__v0__', store.find('k0'));
-        
+
         // Conditionally modify a non-existing [k, v]
         store.insert2('k2', function(v, cb) {
             Assert.equal(undefined, v);
@@ -83,9 +83,9 @@ var tests = {
                 store.insert(kv, kvs[kv]);
             }
         }
-        
+
         Assert.equal(6, store.size());
-        
+
         Assert.equal(undefined, store.erase('k6'));
         for (var kv in kvs) {
             if (kvs.hasOwnProperty(kv)) {
@@ -110,7 +110,7 @@ var tests = {
         Assert.equal(0, kvs[0].k);
         Assert.equal(999, kvs[999].k);
     },
-    test_descending_each: function(store) {
+    test_each_descending: function(store) {
         tests._populate(store);
         var kvs = [];
         store.each({ descending: true }, function(k, v) {
@@ -127,7 +127,102 @@ var tests = {
             kvs.push({k: k, v: v});
             if (kvs.length === 500) { return false; }
         });
-        Assert.equal(500, kvs.length);        
+        Assert.equal(500, kvs.length);
+        Assert.equal(0, kvs[0].k);
+        Assert.equal(499, kvs[499].k);
+    },
+    test_each_descending_break: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ descending: true }, function(k, v) {
+            kvs.push({k: k, v: v});
+            if (kvs.length === 500) { return false; }
+        });
+        Assert.equal(500, kvs.length);
+        Assert.equal(999, kvs[0].k);
+        Assert.equal(500, kvs[499].k);
+    },
+    test_each_limit: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ limit: 10 }, function(k, v) {
+            kvs.push({k: k, v: v});
+        });
+        Assert.equal(10, kvs.length);
+        Assert.equal(0, kvs[0].k);
+        Assert.equal(9, kvs[9].k);
+    },
+    test_each_descending_limit: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ descending: true, limit: 10 }, function(k, v) {
+            kvs.push({k: k, v: v});
+        });
+        Assert.equal(10, kvs.length);
+        Assert.equal(999, kvs[0].k);
+        Assert.equal(990, kvs[9].k);
+    },
+    test_each_limit_break: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ limit: 10 }, function(k, v) {
+            kvs.push({k: k, v: v});
+            if (kvs.length === 5) { return false; }
+        });
+        Assert.equal(5, kvs.length);
+        Assert.equal(0, kvs[0].k);
+        Assert.equal(4, kvs[4].k);
+    },
+    test_each_descending_limit_break: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ descending: true, limit: 10 }, function(k, v) {
+            kvs.push({k: k, v: v});
+            if (kvs.length === 5) { return false; }
+        });
+        Assert.equal(5, kvs.length);
+        Assert.equal(999, kvs[0].k);
+        Assert.equal(995, kvs[4].k);
+    },
+    test_each_startkey: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ startkey: 997 }, function(k, v) {
+            kvs.push({k: k, v: v});
+        });
+        Assert.equal(3, kvs.length);
+        Assert.equal(997, kvs[0].k);
+        Assert.equal(998, kvs[1].k);
+        Assert.equal(999, kvs[2].k);
+    },
+    test_each_startkey_descending: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ startkey: 2, descending: true }, function(k, v) {
+            kvs.push({k: k, v: v});
+        });
+        Assert.equal(3, kvs.length);
+        Assert.equal(2, kvs[0].k);
+        Assert.equal(1, kvs[1].k);
+        Assert.equal(0, kvs[2].k);
+    },
+    test_each_startkey_limit: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ startkey: 997, limit: 1 }, function(k, v) {
+            kvs.push({k: k, v: v});
+        });
+        Assert.equal(1, kvs.length);
+        Assert.equal(997, kvs[0].k);
+    },
+    test_each_startkey_descending_limit: function(store) {
+        tests._populate(store);
+        var kvs = [];
+        store.each({ startkey: 2, descending: true, limit: 1 }, function(k, v) {
+            kvs.push({k: k, v: v});
+        });
+        Assert.equal(1, kvs.length);
+        Assert.equal(2, kvs[0].k);
     }
 };
 

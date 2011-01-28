@@ -11,6 +11,8 @@ this.run = function(tests) {
             } catch(e) {
                 process.stdout.write("failed\n");
                 console.log(e.message);
+                console.log(e.stack);
+                return;
             } finally {
                 teardown(v);
             }
