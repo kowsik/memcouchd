@@ -143,7 +143,7 @@ var tests = {
         Assert.equal('v0', store.find('k0', 'id1'));
         
         Assert.equal(undefined, store.find('k0'));        
-        Assert.equal('v0', store.find_first('k0', undefined, true));
+        Assert.equal('v0', store.findFirst('k0', undefined, true));
     },
     test_erase: function(store) {
         var kvs = { k0: 'v0', k1: 'v1', k2: 'v2', k3: 'v3', k4: 'v4', k5: 'v5' }

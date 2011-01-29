@@ -193,5 +193,48 @@ var doc_tests = {
     }
 };
 
+var view_tests = {
+    setup: function() {
+        var couch = Couch.create();
+        couch.dbCreate('test');
+        return couch;
+    },
+    test_put_view_in_empty_db: function(couch) {
+        design = {
+            _id: '_design/foo',
+            views: {
+                bar: {
+                    map: "function(doc) { emit(doc.type, doc.value); }"
+                }
+            }
+        }
+        json = couch.dbPutDoc('test', undefined, design);
+        Assert.strictEqual(true, json.ok);
+        
+        json = couch.dbView('test', 'foo', 'bar', function() { });
+        Assert.strictEqual(undefined, json);
+        
+        json = couch.dbView('test', 'foo', 'bar', function() { 
+            // Nothing should be in the view
+            Assert.strictEqual(true, false);
+        });
+        
+        json = couch.dbView('test', 'foo2', 'bar');
+        Assert.equal('not_found', json.error);
+        
+        json = couch.dbView('test', 'foo', 'bar2');
+        Assert.equal('not_found', json.error);
+        
+        // Delete the view
+        json = couch.dbGetDoc('test', '_design/foo');
+        Assert.equal('_design/foo', json._id);
+        json = couch.dbDeleteDoc('test', '_design/foo', json['_rev']);
+        Assert.strictEqual(true, json.ok);
+        json = couch.dbView('test', 'foo2', 'bar');
+        Assert.equal('not_found', json.error);
+    }
+};
+
 Runner.run(basic_tests);
 Runner.run(doc_tests);
+Runner.run(view_tests);

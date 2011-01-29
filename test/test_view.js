@@ -17,6 +17,9 @@ var tests = {
         };
         
         var view = View.create('blah', v);
+        Assert.strictEqual(true, view.hasMap());
+        Assert.strictEqual(false, view.hasReduce());
+        
         view.update({ _id: 1, type: 'a', value: 'b' });
         Assert.deepEqual({ 'a': true }, view._keys({ _id: 1 }));
         
