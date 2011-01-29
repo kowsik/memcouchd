@@ -31,8 +31,8 @@ var tests = {
         Assert.strictEqual('b', view.find('a', 2));
         
         rows = [];
-        view.each(function(key, val, id) {
-            rows.push({ id: id, key: key, value: val });
+        view.each(function(row) {
+            rows.push(row);
         });
         
         Assert.strictEqual(1, rows[0].id);
@@ -57,9 +57,7 @@ var tests = {
         Assert.deepEqual({ 'c': true }, view._keys({ _id: 1 }));
         
         rows = [];
-        view.each(function(key, val, id) {
-            rows.push({ id: id, key: key, value: val });
-        });
+        view.each(function(row) { rows.push(row); });
         
         Assert.strictEqual(2, rows[0].id);
         Assert.strictEqual('a', rows[0].key);
@@ -74,6 +72,33 @@ var tests = {
         Assert.strictEqual(1, view.size());
         Assert.strictEqual(undefined, view.find('c', 1));
         Assert.strictEqual(undefined, view._keys({ _id: 1 }));
+    },
+    test_reduce: function() {
+        var v = {
+            map: "function(doc) { emit(doc.type, doc.value); }",
+            reduce: "_sum"
+        };
+        
+        var view = View.create('blah', v);
+        Assert.strictEqual(true, view.hasMap());
+        Assert.strictEqual(true, view.hasReduce());
+        
+        view.update({ _id: 1, type: 'a', value: 1 });
+        view.update({ _id: 2, type: 'b', value: 4 });
+        view.update({ _id: 3, type: 'a', value: 3 });
+        view.update({ _id: 4, type: 'a', value: 2 });
+        view.update({ _id: 5, type: 'b', value: 5 });
+        view.update({ _id: 6, type: 'c', value: 7 });
+        
+        rows = [];
+        view.each(function(row) { rows.push(row); });
+        Assert.strictEqual(3, rows.length);
+        Assert.equal('a', rows[0].key);
+        Assert.equal(6, rows[0].value)
+        Assert.equal('b', rows[1].key);
+        Assert.equal(9, rows[1].value)
+        Assert.equal('c', rows[2].key);
+        Assert.equal(7, rows[2].value)
     }
 };
 

@@ -380,7 +380,7 @@ var tests = {
         });
         Assert.equal(1, kvs.length);
         Assert.equal(5, kvs[0].k);
-    }    
+    }
 };
 
 Runner.run(tests);
