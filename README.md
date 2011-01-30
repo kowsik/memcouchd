@@ -26,8 +26,7 @@ took a couple of seconds. Maybe at some point, I will replace the Store with a
 proper 2-3 BTree. Like I said, this was thrown together in a couple of days.
 
 # map/reduce
-I originally wrote the collation in JavaScript for the [Interactive CouchDB
-Tutorial|http://labs.mudynamics.com/2009/04/03/interactive-couchdb/]. The
+I originally wrote the collation in JavaScript for the [Interactive CouchDB Tutorial|http://labs.mudynamics.com/2009/04/03/interactive-couchdb/]. The
 map part is the slowest because of the description above. The reduce in
 `memcouchd` is always `re-reduce` and currently there's no caching of the 
 reduced values. But v8 makes this super fast! So maybe there was a point to
