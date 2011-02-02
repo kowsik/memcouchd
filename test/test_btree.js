@@ -174,62 +174,17 @@ var tests = {
         Assert.strictEqual(10, root.nodes()[1].nodes()[1].kvs()[1].key);        
         Assert.strictEqual(11, root.nodes()[1].nodes()[1].kvs()[2].key);        
     },
-    test_erase_case_5: function(tree) {
-        root = tree._root();
-        tree.insert(5);
-        tree.insert(6);
-        
-        root._dump();
-        tree.insert(7);
-        root._dump();
-        
-        tree.erase(7);
-        root._dump();        
-    }
-    // test_insert: function(tree) {
+    // test_erase_case_5: function(tree) {
+    //     root = tree._root();
     //     tree.insert(5);
     //     tree.insert(6);
+    //
+    //     root._dump();
     //     tree.insert(7);
-    //     Assert.strictEqual(3, tree.size());
-    //     root = tree._root();
-    //     // Assert.strictEqual(3, root.kvs().length);
-    //     // Assert.strictEqual(0, root.nodes().length);
-    //     // 
-    //     // Assert.strictEqual(5, root.kvs()[0].key);
-    //     // Assert.strictEqual(6, root.kvs()[1].key);
-    //     // Assert.strictEqual(7, root.kvs()[2].key);
-    //     
     //     root._dump();
-    //     tree.insert(8);
-    //     root._dump();
-    //     tree.insert(9);
-    //     root._dump();
-    //     tree.insert(10);
-    //     root._dump();
-    //     tree.insert(11);
-    //     root._dump();
-    //     tree.insert(4);
-    //     root._dump();
-    //     
-    //     tree.insert(2);
-    //     root._dump();
-    //     tree.insert(1);
-    //     root._dump();
-    //     
-    //     tree.erase(11);
-    //     root._dump();        
-    //     
-    //     tree.erase(5);
-    //     root._dump();        
-    //     
+    //
     //     tree.erase(7);
     //     root._dump();
-    // }
-    // ,
-    // test_perf: function(tree) {
-    //     for (var i=0; i<1000000; ++i) {
-    //         tree.insert(Math.floor(Math.random() * 1000000));
-    //     }
     // }
 };
 
