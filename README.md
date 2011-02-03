@@ -16,6 +16,11 @@ CouchDB using Node (again in a language that I'm familiar with), especially
 the `_changes` feed for a highly concurrent/async messaging service. Without
 any persistence, I'm not sure that this would really work.
 
+### _changes feed
+Since `memcouchd` doesn't have any persistence, all the document changes are
+not kept around. Because of this, the `_changes` feed behaves more like redis'
+pubsub in that you have to be watching in order to get notified about a change.
+
 # store
 The collated sequence (aka the view index) is a simple incrementally sorted
 JavaScript array. While this helped me stay sane for the 2-day implementation,
