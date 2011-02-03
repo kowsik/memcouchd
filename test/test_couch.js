@@ -212,7 +212,7 @@ var view_tests = {
         Assert.strictEqual(true, json.ok);
         
         json = couch.dbView('test', 'foo', 'bar', function() { });
-        Assert.strictEqual(undefined, json);
+        Assert.strictEqual(0, json.total_rows);
         
         json = couch.dbView('test', 'foo', 'bar', function() { 
             // Nothing should be in the view
