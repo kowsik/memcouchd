@@ -1,4 +1,4 @@
-var Couch = require(__dirname + '/../lib/couch');
+var Couch = require(__dirname + '/../lib/memcouchd');
 var Assert = require('assert');
 var Runner = require('./runner');
 
