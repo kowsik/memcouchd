@@ -329,6 +329,23 @@ var tests = {
         Assert.equal(4, kvs[2].k);
         Assert.equal(5, kvs[3].k);
     },
+
+	test_each_startkey_endkey2: function(store) {
+		// add docs from 0 to 1000 with a step size of 5
+        for (var n=0; n<1000; n+=5) {
+            store.insert(n, null);
+        }
+        var kvs = [];
+        store.each({ startkey: 21, endkey: 41 }, function(k, v) {
+            kvs.push({k: k, v: v});
+        });
+        Assert.equal(4, kvs.length);
+        Assert.equal(25, kvs[0].k);
+        Assert.equal(30, kvs[1].k);
+        Assert.equal(35, kvs[2].k);
+        Assert.equal(40, kvs[3].k);
+    },
+	
     test_each_startkey_endkey_descending: function(store) {
         tests._populate(store);
         var kvs = [];
