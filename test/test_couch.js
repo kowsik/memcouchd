@@ -171,7 +171,7 @@ var doc_tests = {
         Assert.strictEqual(100, json.committed_update_seq);
         
         json = couch.dbAllDocs('test', { limit: 1 }, function(row) {});
-        Assert.strictEqual(undefined, json);
+        Assert.deepEqual({total_rows: 100, offset: 0}, json);
         
         json = couch.dbAllDocs('test', { limit: 1 }, function(row) {
             Assert.strictEqual('0', row.id);
