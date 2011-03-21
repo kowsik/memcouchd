@@ -1,0 +1,13 @@
+{
+    "name": "memcouchd",
+    "version": "0.1.1",
+    "description": "In-Memory CouchDB clone written in JavaScript",
+    "homepage": "https://github.com/pcapr/memcouchd",
+    "author": {
+        "name": "pcapr",
+        "url": "http://www.pcapr.net"
+    },
+    "engines": { 
+        "node": ">= 0.3.0" 
+    }
+}
